@@ -1,7 +1,22 @@
-import s from "./style.module.css"
+import { SMALL_COVER } from "../../api/Config";
+import s from "./style.module.css";
 
-export default function TvShowItem({tvShow}){
-    return(<div>
+const MAX_TITLE_CHAR=20;
 
-    </div>)
+export default function TvShowItem({ tvShow,onClick }) {
+
+    const click_ =()=>{
+        onClick(tvShow)
+    };
+
+  return (
+    <div className={s.container}>
+      <img
+        className={s.img}
+        alt={tvShow.name}
+        src={SMALL_COVER + tvShow.backdrop_path}
+      />
+      <div className={s.title}>{tvShow.name.length >MAX_TITLE_CHAR? tvShow.name.slice(0,MAX_TITLE_CHAR)+"...":tvShow.name}</div>
+    </div>
+  );
 }
