@@ -9,6 +9,7 @@ import TvShowItem from "./Components/TvShowListItem.js/TvShowItem";
 
 function App() {
   const [currentTvShow, setCurrentTvShow] = useState();
+  const [recommandationList,setRecommandation]= useState();
 
   async function fetchPopular() {
     const popularTvShowList = await TvShowAPI.fetchPopular();
@@ -16,10 +17,25 @@ function App() {
       setCurrentTvShow(popularTvShowList[0]);
     }
   }
+  async function fetchRecommandation(tvShowId) {
+    const recommandationListResp = await TvShowAPI.fetchRecommandation(tvShowId);
+    if (recommandationListResp.length > 0) {
+      setRecommandation(recommandationListResp.slice(0,10));
+    }
+  }
 
   useEffect(() => {
     fetchPopular();
   }, []);
+
+  useEffect(() => {
+    if(currentTvShow){
+      fetchRecommandation(currentTvShow.id);
+    }
+  }, [currentTvShow]);
+
+  
+  console.log(recommandationList,"recommandation");
 
   const getCSS = () => {
     if (currentTvShow) {
@@ -36,7 +52,6 @@ function App() {
       };
     }
   };
-
   return (
     <div className={s.main_container} style={getCSS()}>
       <div className={s.header}>
@@ -65,18 +80,7 @@ function App() {
                 console.log("i have been clicked", tvShow);
               }}
             />
-            <TvShowItem
-              tvShow={currentTvShow}
-              onClick={(tvShow) => {
-                console.log("i have been clicked", tvShow);
-              }}
-            />
-            <TvShowItem
-              tvShow={currentTvShow}
-              onClick={(tvShow) => {
-                console.log("i have been clicked", tvShow);
-              }}
-            />
+            
           </>
         )}
       </div>
