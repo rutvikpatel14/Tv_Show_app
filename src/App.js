@@ -5,11 +5,12 @@ import { BACKDROP_BASE_URL } from "./api/Config";
 import TvShowDetails from "./Components/TvShowDetails/TvShowDetails";
 import LoGo from "./Components/LOGO/Logo";
 import logoImg from "./assets/images/logo.png";
-import TvShowItem from "./Components/TvShowListItem.js/TvShowItem";
+// import TvShowItem from "./Components/TvShowListItem.js/TvShowItem";
+import  TvShowList  from "./Components/TvShowList/TvShowList";
 
 function App() {
   const [currentTvShow, setCurrentTvShow] = useState();
-  const [recommandationList,setRecommandation]= useState();
+  const [recommandationList, setRecommandation] = useState([]);
 
   async function fetchPopular() {
     const popularTvShowList = await TvShowAPI.fetchPopular();
@@ -18,9 +19,11 @@ function App() {
     }
   }
   async function fetchRecommandation(tvShowId) {
-    const recommandationListResp = await TvShowAPI.fetchRecommandation(tvShowId);
+    const recommandationListResp = await TvShowAPI.fetchRecommandation(
+      tvShowId
+    );
     if (recommandationListResp.length > 0) {
-      setRecommandation(recommandationListResp.slice(0,10));
+      setRecommandation(recommandationListResp.slice(0, 10));
     }
   }
 
@@ -29,13 +32,11 @@ function App() {
   }, []);
 
   useEffect(() => {
-    if(currentTvShow){
+    if (currentTvShow) {
       fetchRecommandation(currentTvShow.id);
     }
   }, [currentTvShow]);
 
-  
-  console.log(recommandationList,"recommandation");
 
   const getCSS = () => {
     if (currentTvShow) {
@@ -72,17 +73,7 @@ function App() {
         {currentTvShow && <TvShowDetails tvShow={currentTvShow} />}
       </div>
       <div className={s.recommended_tv_show}>
-        {currentTvShow && (
-          <>
-            <TvShowItem
-              tvShow={currentTvShow}
-              onClick={(tvShow) => {
-                console.log("i have been clicked", tvShow);
-              }}
-            />
-            
-          </>
-        )}
+        {currentTvShow && <TvShowList tvShowList={recommandationList} />}
       </div>
     </div>
   );
