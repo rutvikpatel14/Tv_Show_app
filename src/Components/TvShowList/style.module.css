@@ -5,13 +5,15 @@
 }
 
 .list:hover{
-    overflow: overlay hidden;
+    overflow: overlay;
+    
 }
 
 .list{
     display: flex;
     width: 100vw;
     overflow-x: hidden;
+    padding-bottom: 30px;
 
 }
 

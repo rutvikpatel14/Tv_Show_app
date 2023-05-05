@@ -6,7 +6,8 @@ import TvShowDetails from "./Components/TvShowDetails/TvShowDetails";
 import LoGo from "./Components/LOGO/Logo";
 import logoImg from "./assets/images/logo.png";
 // import TvShowItem from "./Components/TvShowListItem.js/TvShowItem";
-import  TvShowList  from "./Components/TvShowList/TvShowList";
+import TvShowList from "./Components/TvShowList/TvShowList";
+import { SearchBar } from "./Components/Searchbar/SearchBar";
 
 function App() {
   const [currentTvShow, setCurrentTvShow] = useState();
@@ -53,6 +54,18 @@ function App() {
       };
     }
   };
+
+  function updateCurrentTVShow(tvShow) {
+    setCurrentTvShow(tvShow);
+  }
+
+  async function fetchByTitle(title) {
+    const searchRespo = await TvShowAPI.fetchByTitle(title);
+    if (searchRespo.length > 0) {
+      setCurrentTvShow(searchRespo[0])
+    }
+  }
+
   return (
     <div className={s.main_container} style={getCSS()}>
       <div className={s.header}>
@@ -65,7 +78,7 @@ function App() {
             />
           </div>
           <div className="col-md-12 col-lg-4">
-            <input style={{ width: "100%" }} type="text" />
+            <SearchBar onSubmit={fetchByTitle} />
           </div>
         </div>
       </div>
@@ -73,7 +86,7 @@ function App() {
         {currentTvShow && <TvShowDetails tvShow={currentTvShow} />}
       </div>
       <div className={s.recommended_tv_show}>
-        {currentTvShow && <TvShowList tvShowList={recommandationList} />}
+        {currentTvShow && <TvShowList onClickItem={updateCurrentTVShow} tvShowList={recommandationList} />}
       </div>
     </div>
   );
